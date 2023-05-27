@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/portfolio-calculator/static/css/main.715e45e5.css",
+    "main.js": "/portfolio-calculator/static/js/main.f5eb528e.js",
+    "static/js/787.28cb0dcd.chunk.js": "/portfolio-calculator/static/js/787.28cb0dcd.chunk.js",
+    "index.html": "/portfolio-calculator/index.html",
+    "main.715e45e5.css.map": "/portfolio-calculator/static/css/main.715e45e5.css.map",
+    "main.f5eb528e.js.map": "/portfolio-calculator/static/js/main.f5eb528e.js.map",
+    "787.28cb0dcd.chunk.js.map": "/portfolio-calculator/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.715e45e5.css",
+    "static/js/main.f5eb528e.js"
+  ]
+}
