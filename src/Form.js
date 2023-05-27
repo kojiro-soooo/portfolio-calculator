@@ -9,13 +9,24 @@ const Form = () => {
   const [startDate, setStartDate] = useState("");
   const [initialBalance, setInitialBalance] = useState("");
   //const [newBalance, setNewBalance] = useState(0)
-  const [stocks, setStocks] = useState([]);
+  const [stocks, setStocks] = useState([{ symbol: "", allocation: "", num: 0 }]);
   const [errorMessage, setErrorMessage] = useState("");
   const [historicalData, setHistoricalData] = useState([]);
   const [stockPriceDates, setStockPriceDates] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   // const stockPriceDates = {}
+
+  const dataClean = () => {
+    const stocksCopy = stocks.slice()
+    console.log(stocksCopy)
+    for (let i=0; i<stocksCopy.length; i++){
+      stocksCopy[i].symbol = stocksCopy[i].symbol.toUpperCase()
+    }
+    setStocks(stocksCopy)
+    // setStocks(stocks.forEach((stock) => stock.symbol.toUpperCase()))
+    // console.log(stocks)
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,6 +37,7 @@ const Form = () => {
 
     try {
       setIsLoading(true);
+      dataClean();
       await fetchHistoricalData();
       setIsOpen(true);
       // setErrorMessage('')
@@ -67,6 +79,7 @@ const Form = () => {
 
   const handleStockChange = (index, key, value) => {
     const updatedStocks = [...stocks];
+    
     updatedStocks[index][key] = value;
 
     if (value.length > 5) {
@@ -89,9 +102,12 @@ const Form = () => {
   };
 
   const fetchHistoricalData = async () => {
+    // setStocks(stocks.forEach(item => item.toUpperCase))
+
     const apiKey = "a5a6abfb51c5429da534cca299517fc9"; // Replace with your Twelve Data API key
     const symbols = stocks.map((stock) => stock.symbol);
     const endDate = new Date().toISOString().slice(0, 10);
+
     // console.log(startDate)
     // console.log(endDate)
 
@@ -180,7 +196,9 @@ const Form = () => {
   };
 
   const handleClear = () => {
-    window.location.reload();
+    setStocks([{ symbol: "", allocation: "", num: 0 }])
+    setStartDate('');
+    setInitialBalance('');
   };
 
   // setHistoricalData("Test")
@@ -219,18 +237,19 @@ const Form = () => {
         </label>
 
         <label className="block mb-4">
-          <span className="text-gray-700">Initial Balance:</span>
+          <span className="text-gray-700">Initial Balance ($):</span>
           <input
             type="number"
             value={initialBalance}
             onChange={(e) => setInitialBalance(e.target.value)}
             required
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
+            placeholder="e.g. 1000"
           />
         </label>
 
         {stocks.map((stock, index) => (
-          <div key={index} className="mb-4">
+          <div key={index} className="mb-0">
             <label className="block mb-2">
               <span className="text-gray-700">Stock Symbol:</span>
               <div className="relative mt-1 rounded-md shadow-sm">
@@ -244,6 +263,7 @@ const Form = () => {
                   className={`block w-full pr-10 border-gray-300 rounded-md focus:border-blue-300 focus:ring ${
                     stock.isInvalid ? "border-red-500" : ""
                   }`}
+                  placeholder="e.g. MSFT"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                   <span
@@ -273,6 +293,7 @@ const Form = () => {
                 }
                 required
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200"
+                placeholder="e.g. 100"
               />
             </label>
 
@@ -290,28 +311,33 @@ const Form = () => {
 
         <br></br>
 
-        <button
-          type="button"
-          onClick={handleClear}
-          className="px-4 py-2 mb-4 mr-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
-        >
-          Reset Data
-        </button>
+        <div>
+          <div>
+            <button
+              type="button"
+              onClick={addStock}
+              className="mb-4 mx-auto text-blue-500 hover:text-blue-700 focus:outline-none"
+            >
+              Add Stock
+            </button>
+          </div>
 
-        <button
-          type="button"
-          onClick={addStock}
-          className="mb-4 mr-4 text-blue-500 hover:text-blue-700 focus:outline-none"
-        >
-          Add Stock
-        </button>
+          <button
+            type="button"
+            onClick={handleClear}
+            className="px-4 py-2 mb-4 mr-4 bg-red-600 text-white rounded-md hover:bg-red-800 focus:outline-none"
+          >
+            Reset Data
+          </button>
 
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
-        >
-          Calculate
-        </button>
+
+          <button
+            type="submit"
+            className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
+          >
+            Calculate
+          </button>
+        </div>
 
         {isLoading ? (
           <p>Loading...</p>
