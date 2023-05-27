@@ -19,7 +19,6 @@ const Form = () => {
 
   const dataClean = () => {
     const stocksCopy = stocks.slice()
-    console.log(stocksCopy)
     for (let i=0; i<stocksCopy.length; i++){
       stocksCopy[i].symbol = stocksCopy[i].symbol.toUpperCase()
     }
